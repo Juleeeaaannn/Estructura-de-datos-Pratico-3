@@ -1,13 +1,10 @@
 #Ejercicio Nº1: defina el objeto de datos árbol binario de búsqueda,
 # especifique e implemente todos los métodos vistas en teoría.
-from pickle import NONE
 from Nodo import Nodo
 class Arbol:
     __raiz=None
     def __init__(self):
         self.__raiz=None
-    def Vacio(self):
-        return (self.__raiz==None)
     def Insertar(self,nodo,elemento):
         if(nodo==None):
             aux=Nodo(elemento)
@@ -16,21 +13,21 @@ class Arbol:
             if nodo.getElemento()==elemento:
                 print("Elemento ya existente")
             else:
-                if nodo.getSigD() != None:
-                    
+                if nodo.getElemento() < elemento and nodo.getSigD()!=None:
                     self.Insertar(nodo.getSigD(),elemento)
-                
-                elif nodo.getSigD() == None:
-                    
+
+                elif nodo.getElemento() < elemento and nodo.getSigD()==None:
                     aux=Nodo(elemento)
                     nodo.setSigD(aux)
 
                 else:
-                    if nodo.getSigI() != None:
+                    if nodo.getElemento() > elemento and nodo.getSigI()!=None:
                         self.Insertar(nodo.getSigI(),elemento)
-                    else:
+
+                    elif nodo.getElemento() > elemento and nodo.getSigI()==None:
                         aux=Nodo(elemento)
                         nodo.setSigI(aux)
+
     def Suprimir(self):
         pass
     def Busqueda(self):
@@ -47,19 +44,33 @@ class Arbol:
         pass
     def Altura(self):
         pass
-    def InOrden(self):
-        pass
+    def InOrden(self,nodo):
+        if nodo!=None:
+            self.InOrden(nodo.getSigI())
+            print(nodo.getElemento())
+            self.InOrden(nodo.getSigD())
+
     def PreOrden(self,nodo):
         if nodo!=None:
             print(nodo.getElemento())
             self.PreOrden(nodo.getSigI())
             self.PreOrden(nodo.getSigD())
-    def PostOrden(self,A):
-        pass
+    def PostOrden(self,nodo):
+        if nodo!=None:
+            self.PostOrden(nodo.getSigI())
+            self.PostOrden(nodo.getSigD())
+            print(nodo.getElemento())
     def Raiz(self):
         return self.__raiz
 if __name__ =='__main__':
     arbol=Arbol()
-    arbol.Insertar(arbol.Raiz(),"A")
-    arbol.Insertar(arbol.Raiz(),"B")
+    arbol.Insertar(arbol.Raiz(),"2")
+    arbol.Insertar(arbol.Raiz(),"1")
+    arbol.Insertar(arbol.Raiz(),"4")
+    arbol.Insertar(arbol.Raiz(),"3")
+    print("Pre orden")
     arbol.PreOrden(arbol.Raiz())
+    print("In orden")
+    arbol.InOrden(arbol.Raiz())
+    print("Post orden")
+    arbol.PostOrden(arbol.Raiz())
