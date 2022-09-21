@@ -30,8 +30,22 @@ class Arbol:
 
     def Suprimir(self):
         pass
-    def Busqueda(self):
-        pass
+    def Busqueda(self,nodo: Nodo,elemento):
+        if nodo.getElemento() > elemento and nodo.getSigI() != None:
+            self.Busqueda(nodo.getSigI(),elemento)
+
+        elif nodo.getElemento() == elemento:
+            print(f"elemento encontrado:{nodo.getElemento()}") 
+        
+        else:
+            if nodo.getElemento() < elemento and nodo.getSigD() != None:
+                self.Busqueda(nodo.getSigD(),elemento)
+            elif nodo.getElemento() == elemento:
+                print(f"elemento encontrado:{nodo.getElemento()}")
+                return nodo
+            else:
+                print("Elemento no encontrado!")
+           
     def Nivel(self):
         pass
     def Hoja(self):
@@ -74,3 +88,4 @@ if __name__ =='__main__':
     arbol.InOrden(arbol.Raiz())
     print("Post orden")
     arbol.PostOrden(arbol.Raiz())
+    arbol.Busqueda(arbol.Raiz(),"5")
