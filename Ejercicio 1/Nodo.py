@@ -18,3 +18,8 @@ class Nodo:
         return self.__elemento
     def setElemento(self,elemento):
         self.__elemento=elemento
+    def __gt__(self,otro):
+        retorna=False
+        if self.getElemento() < otro.getElemento():
+            retorna=True
+        return retorna
