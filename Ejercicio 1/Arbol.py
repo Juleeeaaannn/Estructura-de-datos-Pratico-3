@@ -1,7 +1,5 @@
 #Ejercicio Nº1: defina el objeto de datos árbol binario de búsqueda,
 # especifique e implemente todos los métodos vistas en teoría.
-from ast import If
-from tkinter import N
 from Nodo import Nodo
 class Arbol:
     __raiz=None
@@ -29,34 +27,29 @@ class Arbol:
                     elif nodo.getElemento() > elemento and nodo.getSigI()==None:
                         aux=Nodo(elemento)
                         nodo.setSigI(aux)
-
     def Suprimir(self,elemento):
-        nodo=self.Busqueda(self.__raiz,elemento)
-        print(nodo.getElemento())
-        if nodo.getSigD()==None and nodo.getSigI()==None:
-            nodo=None
+        self.__Suprimir(self.__raiz,self.__raiz,elemento)
+
+    def __Suprimir(self,nodo,nodoP,elemento):   
+        if nodo==None:
+            print("no se encontro el elemento")
         else:
-            if nodo.getSigD()!=None:
-                aux=self.__raiz
-                while(not self.Hijo(self.__raiz,nodo,aux)):
-                    if aux < aux.getSigD():
-                        aux=aux.getSigI()
-                    else:
-                        aux=aux.getSigD()
-                aux.getSigD=nodo.getSigD()
-                aux.getSigI=nodo.getSigI()
+            if nodo.getElemento() < elemento and nodo.getSigD()!=None:
+                nodoP=nodo
+                self.__Suprimir(nodo.getSigD(),nodoP,elemento)
 
-            elif nodo.getSigI()!=None:
-                aux=self.__raiz
-                while(not self.Hijo(self.__raiz,nodo,aux)):
-                    if aux > aux.getSigI():
-                        aux=aux.getSigD()
-                    else:
-                        aux=aux.getSigI()
-                aux.getSigD=nodo.getSigD()
-                aux.getSigI=nodo.getSigI()
-
-
+            elif nodo.getElemento()==elemento and nodo.getSigD()==None:
+                        nodoP.setSigI(nodo.getSigI())
+                        nodo=None
+            else:
+                if nodo.getElemento() > elemento and nodo.getSigI()!=None:
+                    nodoP=nodo
+                    self.__Suprimir(nodo.getSigI(),nodoP,elemento)
+                    
+                if nodo.getElemento()==elemento and nodo.getSigI()==None:
+                        nodoP.setSigD(nodo.getSigD())
+                        nodo=None
+                        
 
     def Busqueda(self,nodo: Nodo,elemento):
         if nodo.getElemento() > elemento and nodo.getSigI() != None:
@@ -68,9 +61,6 @@ class Arbol:
         else:
             if nodo.getElemento() < elemento and nodo.getSigD() != None:
                 self.Busqueda(nodo.getSigD(),elemento)
-            elif nodo.getElemento() == elemento:
-                print(f"elemento encontrado:{nodo.getElemento()}")
-                return nodo
             else:
                 print("Elemento no encontrado!")
            
@@ -150,8 +140,8 @@ if __name__ =='__main__':
     arbol.Insertar(arbol.Raiz(),"4")
     arbol.Insertar(arbol.Raiz(),"3")
     arbol.InOrden(arbol.Raiz())
-    print("---")
-    arbol.Suprimir("2")
+    print("---------------------")
+    arbol.Suprimir("4")
     arbol.InOrden(arbol.Raiz())
     # arbol.Nivel(arbol.Raiz(),"3")
     # print(arbol.Altura(arbol.Raiz()))
