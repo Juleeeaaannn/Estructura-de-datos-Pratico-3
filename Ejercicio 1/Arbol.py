@@ -1,7 +1,5 @@
 #Ejercicio Nº1: defina el objeto de datos árbol binario de búsqueda,
 # especifique e implemente todos los métodos vistas en teoría.
-from ast import Pass
-from pickle import NONE
 from Nodo import Nodo
 
 class Arbol:
@@ -81,10 +79,12 @@ class Arbol:
                             nodo.setSigI(None)
                         else:
                             ant=nodo.getSigI() #al padre le asignamos la derecha siguiente del hijo
-                            while aux != None:
+                            while aux.getSigD() != None:
                                 ant=aux
                                 aux = aux.getSigD()
-                            print(aux.getElemento())
+                            nodo.setElemento(aux.getElemento())
+                            ant.setSigD(aux.getSigI())
+                            aux=None
                             #aux1 = aux.getSigD()    
                             #self.__Suprimir(aux,aux.getSigD(),aux1.getElemento())
                         print("grado = 2")
@@ -142,13 +142,27 @@ class Arbol:
         else:
             return False
 
-    # def Camino(self, nodo,nodoInicio,nodoFinal):
-    #     if nodo!=None:
-    #         if nodo == nodoInicio:
-    #             print(f"{nodo.getElemento()}")
-    #         else:
-    #             if nodo!=nodoFinal:
-                    
+    def Camino(self,nodoInicio,nodoFinal):
+        lista=[]
+        self.__Camino(self.__raiz,nodoInicio,nodoFinal,lista)
+
+    def __Camino(self, nodo,nodoInicio,nodoFinal,lista):
+        if nodo!=None:
+            if nodo.getElemento() > nodoInicio and nodoInicio!=-1:
+                self.__Camino(nodo.getSigI(),nodoInicio,nodoFinal,lista)
+            elif nodo.getElemento() < nodoInicio and nodoInicio!=-1:
+                self.__Camino(nodo.getSigD(),nodoInicio,nodoFinal,lista)
+            else:
+                lista.append(nodo.getElemento())
+                if nodo.getElemento() > nodoFinal:
+                    self.__Camino(nodo.getSigI(),-1,nodoFinal,lista)
+                elif nodo.getElemento() < nodoFinal:
+                    self.__Camino(nodo.getSigD(),-1,nodoFinal,lista)
+                else:
+                    print(lista)
+            
+
+
     def Altura(self,nodo:Nodo,i=0): #revisar
         if nodo!=None:
             aux1 = self.Altura(nodo.getSigI(),i+1)
@@ -183,15 +197,13 @@ if __name__ =='__main__':
     arbol.Insertar(arbol.Raiz(),6)
     arbol.Insertar(arbol.Raiz(),2)
     arbol.Insertar(arbol.Raiz(),8)
-    arbol.Insertar(arbol.Raiz(),2)
     arbol.Insertar(arbol.Raiz(),1)
     arbol.Insertar(arbol.Raiz(),4)
     arbol.Insertar(arbol.Raiz(),3)
     #arbol.Insertar(arbol.Raiz(),79)
     arbol.InOrden(arbol.Raiz())
     print("---------------------")
-    arbol.Suprimir(2)
-    arbol.InOrden(arbol.Raiz())
+    arbol.Camino(6,4)
     print("---------------------")
     # arbol.Suprimir(4)
     # arbol.InOrden(arbol.Raiz())
