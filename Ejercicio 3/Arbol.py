@@ -1,5 +1,9 @@
-#Ejercicio Nº1: defina el objeto de datos árbol binario de búsqueda,
-# especifique e implemente todos los métodos vistas en teoría.
+# Ejercicio Nº3: Usando el mismo objeto de datos del ej. 1, implemente una función para c/u de los siguientes incisos:
+# a) Mostrar el nodo padre y el nodo hermano, de un nodo previamente ingresado por
+# teclado; éste puede o no existir en el árbol.
+# b) mostrar la cantidad de nodos del árbol en forma recursiva.
+# c) Mostrar la altura de un árbol.
+# d) Mostrar los sucesores de un nodo ingresado previamente por teclado.
 from Nodo import Nodo
 
 class Arbol:
@@ -88,21 +92,7 @@ class Arbol:
                             #aux1 = aux.getSigD()    
                             #self.__Suprimir(aux,aux.getSigD(),aux1.getElemento())
                         print("grado = 2")
-                        
 
-    def Busqueda(self,nodo: Nodo,elemento):  #bien
-        if nodo.getElemento() > elemento and nodo.getSigI() != None:
-            self.Busqueda(nodo.getSigI(),elemento)
-
-        elif nodo.getElemento() == elemento:
-            print(f"elemento encontrado:{nodo.getElemento()}") 
-            return nodo
-        else:
-            if nodo.getElemento() < elemento and nodo.getSigD() != None:
-                self.Busqueda(nodo.getSigD(),elemento)
-            else:
-                print("Elemento no encontrado!")
-           
     def Nivel(self,nodo,elemento,i=0):  #bien
         if nodo!=None:
             if nodo.getElemento() < elemento:
@@ -114,10 +104,28 @@ class Arbol:
                 return i
         else:
             print("nivel de elemento no encontrado")
+    
+    def _obtener(self,clave,nodoActual):
+        if not nodoActual:
+            return None
+        elif nodoActual.getElemento() == clave:
+            return nodoActual
+        elif clave < nodoActual.getElemento():
+            return self._obtener(clave,nodoActual.getSigI())
+        else:
+            return self._obtener(clave,nodoActual.getSigD())
         
-    def Hoja(self): #faltaa
-        pass
+    def Hoja(self, nodo, elemento): #faltaa
+        if nodo != None:
+            hojita = self._obtener(elemento, nodo)
+            if hojita.getSigD() == None and hojita.getSigI() == None:
+                print("el nodo es hoja")
+            else:
+                print("el nodo no es hoja")
+        else:
+            print("el arbol no tiene nodos")
 
+                
     def Hijo(self,nodo:Nodo,X,Z):#evalua si x es descendiente directo de z #bien
         if nodo!=None:
             if nodo==X:
@@ -160,8 +168,7 @@ class Arbol:
                     self.__Camino(nodo.getSigD(),-1,nodoFinal,lista)
                 else:
                     print(lista)
-            
-
+    
 
     def Altura(self,nodo:Nodo,i=0): #revisar
         if nodo!=None:
@@ -191,6 +198,51 @@ class Arbol:
 
     def Raiz(self): #bien
         return self.__raiz
+    # a) Mostrar el nodo padre y el nodo hermano, de un nodo previamente ingresado por
+    # teclado; éste puede o no existir en el árbol.
+    def NodoPyH(self,elemento):
+        self.__NodoPyH(self.__raiz,self.__raiz,elemento)
+        
+    def __NodoPyH(self,nodo,padre,elemento):
+        if nodo!=None:
+            if nodo.getElemento() > elemento:
+                self.__NodoPyH(nodo.getSigI(),nodo,elemento)
+            elif nodo.getElemento() < elemento:
+                self.__NodoPyH(nodo.getSigD(),nodo,elemento)
+            elif nodo.getElemento()==elemento:
+                if padre.getSigD()==nodo and padre.getSigI()!=None:
+                    padre=padre.getSigI()
+                    print(padre.getElemento())
+                    print(nodo.getElemento())
+                elif padre.getSigI()==nodo and padre.getSigD()!=None:
+                    padre=padre.getSigI()
+                    print(padre.getElemento())
+                    print(nodo.getElemento())
+                else:
+                    print(nodo.getElemento())
+                    print("No tiene hermanos!")
+
+    def CantidadNodos(self,nodo:Nodo,i=0): 
+        if nodo!=None:
+            aux1 = self.Altura(nodo.getSigI(),i+1)
+            aux2 = self.Altura(nodo.getSigD(),i+1)
+            return aux1 + aux2
+        else:
+            return i
+    
+    def Sucesores (self, nodo, elemento):
+        if nodo != None:
+            nodito = self._obtener(elemento, nodo)
+            if nodito.getSigI() != None and nodito.getSigD() != None:
+                print("Tiene sucesores")
+                print("a la izquiera: ", nodito.getSigI().getElemento(), "a la derecha: ", nodito.getSigD().getElemento())
+            elif nodito.getSigI() == None and nodito.getSigD() != None:
+                print("Solo tiene sucesor a la derecha: ", nodito.getSigD().getElemento())
+            elif nodito.getSigI() != None and nodito.getSigD() == None:
+                print("Solo tiene sucesor a la izquiera: ", nodito.getSigI().getElemento())
+            else:
+                print("No tiene sucesores")
+
 
 if __name__ =='__main__':
     arbol=Arbol()
@@ -201,10 +253,10 @@ if __name__ =='__main__':
     arbol.Insertar(arbol.Raiz(),4)
     arbol.Insertar(arbol.Raiz(),3)
     #arbol.Insertar(arbol.Raiz(),79)
-    arbol.InOrden(arbol.Raiz())
-    print("---------------------")
-    arbol.Camino(6,4)
-    print("---------------------")
+    print("-------------- SUCESORES --------------------")
+    arbol.Sucesores(arbol.Raiz(), 4)
+    
+    #print(arbol.CantidadNodos(arbol.Raiz()))
     # arbol.Suprimir(4)
     # arbol.InOrden(arbol.Raiz())
     # print("---------------------")
